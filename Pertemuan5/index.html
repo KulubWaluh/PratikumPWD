@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Distro Pakaian</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body class="dark-punk-theme">
+
+  <header class="main-header">
+    <div class="container navbar-content">
+      <div class="brand-logo">
+        <span class="brand-name">CHAOS<span>RIOT</span></span>
+        <span class="brand-tagline">Underground Rebel Apparel</span>
+      </div>
+
+      <div class="search-container">
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder="Cari nama kaos, band, apparel..." 
+          autocomplete="off"
+        >
+      </div>
+
+      <button id="cart-toggle-btn" class="btn-cart-nav" title="Buka Keranjang Belanja">
+        <span class="cart-icon">🛒</span>
+        <span class="cart-text">Keranjang</span>
+        <span id="cart-badge" class="badge-count">0</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero-section">
+    <div class="container hero-content">
+      <h1 class="hero-title">DISTRO PAKAIAN BAND UNDERGROUND</h1>
+      <p class="hero-desc">Koleksi merchandise kaos band independen & rebel streetwear lokal berkualitas.</p>
+    </div>
+  </section>
+
+  <main class="container main-catalog">
+    <div class="section-header">
+      <div class="section-title-wrap">
+        <h2 class="section-title">Katalog Produk</h2>
+        <p class="section-subtitle" id="catalog-subtitle">Pakaian berjejer ke samping — gunakan tombol geser atau usap untuk melihat koleksi lainnya</p>
+      </div>
+
+      <div class="catalog-controls">
+        <div class="slide-arrows-group">
+          <button id="btn-slide-left" class="btn-nav-slide" title="Geser produk ke kiri">
+            ◀ Geser ke Kiri
+          </button>
+          <button id="btn-slide-right" class="btn-nav-slide" title="Geser produk ke kanan">
+            Geser ke Kanan ▶
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="search-status-text" class="search-status"></div>
+
+    <div id="product-list" class="product-slider"></div>
+
+    <div id="no-products-msg" class="empty-state" style="display: none;">
+      <div class="empty-icon">🔍</div>
+      <h3>Produk Tidak Ditemukan</h3>
+      <p>Tidak ada pakaian yang cocok dengan kata kunci pencarian Anda. Silakan coba kata kunci lain.</p>
+    </div>
+  </main>
+
+  <div id="cart-panel-overlay" class="cart-overlay" style="display: none;">
+    <div id="cart-panel" class="cart-panel">
+      <div class="cart-panel-header">
+        <div class="cart-title-wrapper">
+          <span class="cart-icon-header">🛍️</span>
+          <h3>Keranjang Belanja</h3>
+        </div>
+        <button id="close-cart-btn" class="btn-close-cart" title="Tutup Keranjang">&times;</button>
+      </div>
+
+      <div class="cart-panel-body">
+        <div id="empty-cart-message" class="empty-cart-notice">
+          <div class="empty-cart-icon">🛒</div>
+          <p>Keranjang belanja Anda masih kosong.</p>
+          <span>Pilih kaos di katalog untuk mulai berbelanja!</span>
+        </div>
+
+        <ul id="cart-items" class="cart-items-list"></ul>
+      </div>
+
+      <div class="cart-panel-footer">
+        <div class="cart-summary-row">
+          <span class="summary-label">Total Barang:</span>
+          <span id="total-items" class="summary-value">0 item</span>
+        </div>
+        <div class="cart-summary-row total-price-row">
+          <span class="summary-label">Total Pembayaran:</span>
+          <span id="total-price" class="summary-total-amount">Rp 0</span>
+        </div>
+
+        <div class="cart-action-buttons">
+          <button id="empty-cart-btn" class="btn-empty-cart">
+            🗑️ Kosongkan Keranjang
+          </button>
+          <button id="checkout-btn" class="btn-checkout">
+            💳 Checkout Sekarang
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="order-summary-section" class="container order-summary-section" style="display: none;">
+    <div class="summary-card">
+      <div class="summary-badge-success">⚡ PESANAN TELAH DIKONFIRMASI</div>
+      <h2 class="summary-main-title">Struk Bukti Pesanan</h2>
+      <p class="summary-note">Terima kasih telah berbelanja di CHAOS & RIOT! Berikut rincian pesanan Anda:</p>
+
+      <div class="summary-details-box">
+        <div class="summary-row">
+          <span class="info-label">Nama Pembeli:</span>
+          <span id="summary-buyer-name" class="info-value-bold">-</span>
+        </div>
+        <div class="summary-row">
+          <span class="info-label">Tanggal Transaksi:</span>
+          <span id="summary-date" class="info-value">-</span>
+        </div>
+        <div class="summary-row">
+          <span class="info-label">No. Invoice:</span>
+          <span id="summary-invoice" class="info-value-invoice">-</span>
+        </div>
+      </div>
+
+      <div class="summary-table-wrapper">
+        <table class="summary-table">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nama Produk</th>
+              <th>Harga Satuan</th>
+              <th>Jumlah</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody id="summary-items-list">
+          </tbody>
+          <tfoot>
+            <tr>
+              <th colspan="4" class="text-right">Grand Total:</th>
+              <th id="summary-total-price" class="text-total">Rp 0</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="summary-footer-actions">
+        <button id="btn-print-summary" class="btn-print" onclick="window.print()">🖨️ Cetak Struk</button>
+        <button id="btn-close-summary" class="btn-secondary">Belanja Pakaian Lain</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="main-footer">
+    <div class="container footer-content">
+      <div class="footer-col">
+        <h4>☠️ CHAOS & RIOT DISTRO</h4>
+        <p>Distro independen apparel underground: punk rock, metal, grunge, dan rebel streetwear berkualitas tinggi.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Metode Pembayaran</h4>
+        <p>Transfer Bank (BCA, Mandiri, BNI, BRI), QRIS Instan, dan E-Wallet.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Kontak Layanan</h4>
+        <p>WhatsApp Distro: +62 821-1544-2170<br>Email: andikajulianto@gmail.com</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 2026 CHAOS & RIOT UNDERGROUND APPAREL. ALL RIGHTS RESERVED.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
